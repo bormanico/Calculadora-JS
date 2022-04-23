@@ -1,0 +1,77 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: black;
+  opacity: 0.9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  margin: 15%;
+}
+
+.display {
+  background-color: rgb(79, 77, 90);
+  padding: 5px;
+
+  width: 316px;
+  text-align: right;
+  overflow: hidden;
+
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+#output {
+  font-size: 70px;
+  color: rgb(233, 232, 236);
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding-right: 10px;
+
+  overflow: hidden;
+  float: right;
+}
+.dark-btn {
+  background-color: rgb(93, 94, 97);
+}
+
+.right-btn {
+  background-color: rgb(250, 159, 42);
+  margin-left: 1px;
+}
+
+.left-btn {
+  margin-left: 0px;
+}
+
+.btm-lft-btn {
+  width: 162px;
+  border-bottom-left-radius: 10px;
+  margin-left: 0px;
+}
+
+.btm-right-btn {
+  border-bottom-right-radius: 10px;
+}
+
+button {
+  color: rgb(233, 232, 236);
+
+  width: 80px;
+  height: 70px;
+  margin: 1px;
+  background-color: rgb(112, 114, 121);
+  /* color: white; */
+  font-size: 35px;
+  border: 0ch;
+}
+
+button:hover {
+  cursor: pointer;
+  opacity: 0.65;
+}
+button:active {
+  background-color: rgb(113, 72, 18);
+}
