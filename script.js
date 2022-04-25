@@ -18,6 +18,7 @@ const btn0 = document.querySelector('#r5-1');
 const btnDecimal = document.querySelector('#r5-2');
 const btnEquals = document.querySelector('#r5-3');
 
+// mapeamento das teclas do teclado numérico para cliques nos botões da calculadora
 document.addEventListener('keydown', function (event) {
   console.log(event.key);
   switch (event.key) {
@@ -72,8 +73,10 @@ document.addEventListener('keydown', function (event) {
   }
 });
 
-let isDecimal = false;
-
+/**
+ * Função que introduz valores no "visor".
+ * Caso esteja no visor 0 ou NaN substitui pelo valor da tecla. Caso contrário acrescenta ao restante.
+ */
 function outputClick(value) {
   if (output.textContent === '0' || output.textContent === 'NaN') {
     output.textContent = value;
@@ -82,11 +85,25 @@ function outputClick(value) {
   }
 }
 
+/**
+ * Variável para controlar a introdução de separadores decimais.
+ * Posta a 'true' com a introdução de vírgula e a 'false' com a introdução dos operadores (+, -, x e /), do 'igual' e do 'clear'
+ */
+let isDecimal = false;
+
+// botão 'clear': põe o valor no visor a '0'
 btnClear.addEventListener('click', function () {
   output.textContent = '0';
   isDecimal = false;
 });
 
+/**
+ *
+ * Função usada para a introdução de operadores (soma, multiplicação, etc.) e da vírgula.
+ * Se o último caractere no visor for um operador substitui-o, se não acrescenta.
+ * Se estiver 'NaN' no visor subsitui por '0'
+ * @param {*} value
+ */
 function outputOperator(value) {
   if (output.textContent !== 'NaN') {
     let outputStr = output.textContent;
@@ -103,35 +120,13 @@ function outputOperator(value) {
       output.textContent = newStr;
     } else {
       output.textContent += value;
-
-      //outputClick(value);
     }
   } else {
     output.textContent = '0';
   }
 }
 
-// function numberButtons() {
-//   let numberOutput = 1;
-//
-//   for (let i = 4; i >= 2; i--) {
-//
-//     for (let j = 1; j <= 3; j++) {
-//
-//
-//       document
-//         .querySelector(`#r${i}-${j}`)
-//         .addEventListener('click', function () {
-//           outputClick(`a${numberOutput}`);
-//
-//         });
-//
-//       numberOutput++;
-//     }
-//   }
-// }
-// numberButtons();
-
+//Mapeamento das teclas da calculadora
 btnDivide.addEventListener('click', function () {
   outputOperator('\u00f7');
   isDecimal = false;
@@ -166,6 +161,10 @@ btn6.addEventListener('click', function () {
   outputClick('6');
 });
 
+/**
+ * Introdução do operador '-'.
+ * Caso esteja '0' no visor substitui o '0', caso contrário é feita a introdução como os restantes operadores
+ */
 btnMinus.addEventListener('click', function () {
   if (output.textContent === '0') {
     outputClick('\u2212');
@@ -200,17 +199,25 @@ btnDecimal.addEventListener('click', function () {
     isDecimal = true;
   }
 });
+
+/**
+ * 'Unicode escape sequences' para os operadores matemáticos:
+ * comma '\u002c'
+ * plus '\u002b'
+ * minus '\u2212'
+ * times '\u00d7'
+ * division '\u00f7'
+ */
+
+/**
+ * Botão de igualdade. Usa a função eval() para avaliar a string no visor e retorna o valor para o visor.
+ */
 btnEquals.addEventListener('click', function () {
-  /**
-   * comma '\u002c'
-   * plus '\u002b'
-   * minus '\u2212'
-   * times '\u00d7'
-   * divide '\u00f7'
-   */
   isDecimal = false;
+
   let equation = output.textContent;
 
+  // substituição dos símbolos unicode na string do visor por carateres reconhecidos pela função eval().
   equation = equation.replaceAll('\u002c', '.');
   equation = equation.replaceAll('\u002b', '+');
   equation = equation.replaceAll('\u2212', '-');
@@ -218,13 +225,20 @@ btnEquals.addEventListener('click', function () {
   equation = equation.replaceAll('\u00f7', '/');
 
   let result = eval(equation);
-  console.log(equation, result);
+  //console.log(equation, result);
 
-  result = Math.round((result + Number.EPSILON) * 10000000) / 10000000;
+  /**
+   * corrige o erro de precisão dos 'floating point numbers' no resultado, até 7 casas decimais.
+   * Number.EPSILON é o menor número de ponto flutuante positivo (~2,22E-16). É usado aqui para arrendondar corretamente, por exemplo, 1,5E-8 para 2E-8
+   *
+   */
+  result = Math.round((result + Number.EPSILON) * 100000000) / 100000000;
 
+  // converte o resultado da divisão por zero da função eval() para 'NaN' conforme pedido no enunciado.
   if (result === Infinity) {
     output.textContent = 'NaN';
   } else {
+    // altera o separador decimal de '.' para ',' e mostra o resultado no visor.
     result = result.toString();
     result = result.replace('.', '\u002c');
     console.log(result);
